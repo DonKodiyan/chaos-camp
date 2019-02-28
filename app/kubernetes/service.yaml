@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: chaoscamp-app
+spec:
+  selector:
+    app: chaoscamp-app
+  ports:
+  - protocol: TCP
+    port: 8080
+  type: ClusterIP

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chaoscamp-app
+spec:
+  selector:
+    matchLabels:
+      app: chaoscamp-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: chaoscamp-app
+    spec:
+      containers:
+      - name: chaoscamp-app
+        image: chaoscamp/app:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
