@@ -24,3 +24,4 @@
 
 ## Material
 * [Stability Patterns & Antipatterns • Michael T. Nygard](https://m.youtube.com/watch?v=VZePNGQojfA)
+* [Release It!](https://doc.lagout.org/programmation/Pragmatic%20Programmers/Release%20It%21%20Design%20and%20Deploy%20Production-Ready%20Software.pdf)
