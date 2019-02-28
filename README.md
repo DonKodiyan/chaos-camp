@@ -4,7 +4,7 @@
 * Spring Boot
 * Hystrix
 * Gatling
-* Chaos Monkey for Spring Boot
+* [Chaos Monkey for Spring Boot](https://codecentric.github.io/chaos-monkey-spring-boot/)
 * Chaos Monkey for Kubernetes
 * Kubernetes
 * Toxy Proxy
