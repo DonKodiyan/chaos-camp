@@ -7,5 +7,6 @@ spec:
     app: chaoscamp-hasher
   ports:
   - protocol: TCP
-    port: 8080
-  type: ClusterIP
+    port: 8082
+    targetPort: 8082
+  type: LoadBalancer

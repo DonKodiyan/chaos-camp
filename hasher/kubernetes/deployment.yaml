@@ -17,4 +17,4 @@ spec:
         image: chaoscamp/hasher:latest
         imagePullPolicy: Never
         ports:
-        - containerPort: 8080
+        - containerPort: 8082
