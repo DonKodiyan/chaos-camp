@@ -18,6 +18,11 @@ public class AppController {
         .getForObject(api + "?value=" + value, Response.class).getResult();
   }
 
+  @GetMapping("")
+  public String test() {
+    return "hello world";
+  }
+
   public static class Response{
     private String result;
 

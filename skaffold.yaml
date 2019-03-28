@@ -4,6 +4,7 @@ build:
   artifacts:
   - image: gcr.io/chaos-camp/app
     context: app
+    jibGradle: {}
   - image: gcr.io/chaos-camp/hasher
     context: hasher
   local:
