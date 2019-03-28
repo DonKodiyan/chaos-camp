@@ -1,0 +1,15 @@
+apiVersion: skaffold/v1beta7
+kind: Config
+build:
+  artifacts:
+  - image: gcr.io/chaos-camp/app
+    context: app
+  - image: gcr.io/chaos-camp/hasher
+    context: hasher
+  local:
+    push: false
+deploy:
+  kubectl:
+    manifests:
+    - app/kubernetes/*
+    - hasher/kubernetes/*
