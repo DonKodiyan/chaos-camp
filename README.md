@@ -1,5 +1,12 @@
 # Chaos Camp
 
+How to start your environment locally:
+```
+skaffold dev
+```
+
+You can find more info on how to install, here: https://skaffold.dev/docs/getting-started/
+
 ## Tools
 * Spring Boot
 * Hystrix
