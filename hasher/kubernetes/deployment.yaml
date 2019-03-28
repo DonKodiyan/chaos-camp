@@ -14,7 +14,6 @@ spec:
     spec:
       containers:
       - name: chaoscamp-hasher
-        image: chaoscamp/hasher:latest
-        imagePullPolicy: Never
+        image: gcr.io/chaos-camp/hasher:latest
         ports:
         - containerPort: 8082

@@ -14,7 +14,6 @@ spec:
     spec:
       containers:
       - name: chaoscamp-app
-        image: chaoscamp/app:latest
-        imagePullPolicy: Never
+        image: gcr.io/chaos-camp/app:latest
         ports:
         - containerPort: 8081
