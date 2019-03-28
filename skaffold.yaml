@@ -7,6 +7,7 @@ build:
     jibGradle: {}
   - image: gcr.io/chaos-camp/hasher
     context: hasher
+    jibGradle: {}
   local:
     push: false
 deploy:
