@@ -1,5 +1,8 @@
 # Chaos Camp
 
+## Build
+Requires Docker 18.09 or later
+
 ## Tools
 * Spring Boot
 * Hystrix
