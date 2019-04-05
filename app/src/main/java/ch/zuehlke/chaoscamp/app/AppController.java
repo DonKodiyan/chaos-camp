@@ -1,6 +1,7 @@
 package ch.zuehlke.chaoscamp.app;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +20,18 @@ public class AppController {
 
   @GetMapping("api/hello")
   public Mono<String> hash(@RequestParam("value") String value) {
-    return webClient.get()
-        .attribute("value", value)
-        .retrieve()
-        .bodyToMono(Response.class)
-        .map(Response::getResult);
+    return webClient
+            .get()
+            .uri(uriBuilder -> uriBuilder.queryParam("value", value).build())
+            .accept(MediaType.APPLICATION_JSON_UTF8)
+            .retrieve()
+            .bodyToMono(Response.class)
+            .map(Response::getResult);
+  }
+
+  @GetMapping("api/ping")
+  public Mono<String> ping(@RequestParam("value") String value) {
+    return Mono.just(value);
   }
 
   public static class Response {
