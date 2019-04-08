@@ -1,6 +1,7 @@
 package ch.zuehlke.chaoscamp.hasher;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import java.util.Optional;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +22,8 @@ public class HasherBackendApplication {
 
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> commonTags() {
-      return r -> r.config().commonTags("pod_name", System.getenv().get("HOSTNAME"));
+      String hostname = Optional.ofNullable(System.getenv().get("HOSTNAME")).orElse("localhost");
+      return r -> r.config().commonTags("pod_name", hostname);
     }
   }
 }
