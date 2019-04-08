@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Hasher start local" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="hasher.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="ch.zuehlke.chaoscamp.hasher.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.chaoscamp.hasher.HasherBackendApplication" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

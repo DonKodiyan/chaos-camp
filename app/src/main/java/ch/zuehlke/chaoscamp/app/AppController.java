@@ -34,7 +34,14 @@ public class AppController {
   @Timed(value="api.ping")
   @GetMapping("api/ping")
   public Mono<String> ping(@RequestParam("value") String value) {
-    return Mono.just(value);
+
+    return Mono.just(value+
+            "<br/> Node MY_NODE_NAME: " + System.getenv().get("MY_NODE_NAME") +
+            "<br/> Node MY_POD_NAME: " + System.getenv().get("MY_POD_NAME") +
+            "<br/> Node MY_POD_NAMESPACE: " + System.getenv().get("MY_POD_NAMESPACE") +
+            "<br/> Node MY_POD_IP: " + System.getenv().get("MY_POD_IP") +
+            "<br/> Node MY_POD_SERVICE_ACCOUNT: " + System.getenv().get("MY_POD_SERVICE_ACCOUNT")
+    ) ;
   }
 
   public static class Response {
