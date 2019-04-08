@@ -20,7 +20,7 @@ public class AppBackendApplication {
   public class MetricsConfig {
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> commonTags() {
-      return r -> r.config().commonTags("pod_name", System.getenv().get("MY_POD_NAME"));
+      return r -> r.config().commonTags("pod_name", System.getenv().get("HOSTNAME"));
     }
   }
 }
