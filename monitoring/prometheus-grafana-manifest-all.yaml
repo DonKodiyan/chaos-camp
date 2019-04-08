@@ -2530,7 +2530,11 @@ data:
             regex: (.+)
             target_label: __metrics_path__
             replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
-
+      - job_name: 'spring-actuator'
+        metrics_path: '/actuator/prometheus'
+        scrape_interval: 5s
+        static_configs:
+        - targets: ['chaoscamp-app.default.svc.cluster.local:8081']
 kind: ConfigMap
 metadata:
   creationTimestamp: null
