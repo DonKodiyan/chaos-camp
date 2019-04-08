@@ -3,8 +3,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.gatling</groupId>
-  <artifactId>gatling-maven-plugin-demo</artifactId>
+  <groupId>ch.zuehlke.chaoscamp</groupId>
+  <artifactId>gatling</artifactId>
   <version>3.0.3</version>
 
   <properties>

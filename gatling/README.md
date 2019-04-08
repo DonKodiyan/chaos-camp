@@ -4,7 +4,7 @@
 
 To test it out, simply execute the following command:
 
-    $mvn gatling:test -Dgatling.simulationClass=scenarios.SimpleScenario
+    $mvn gatling:test -Dgatling.simulationClass=simulations.SimpleSimulation
 
 or simply:
 
