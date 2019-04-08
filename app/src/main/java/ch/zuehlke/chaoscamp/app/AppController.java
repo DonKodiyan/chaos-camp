@@ -1,5 +1,6 @@
 package ch.zuehlke.chaoscamp.app;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ public class AppController {
 
   }
 
+  @Timed(value="api.hello")
   @GetMapping("api/hello")
   public Mono<String> hash(@RequestParam("value") String value) {
     return webClient
@@ -29,6 +31,7 @@ public class AppController {
             .map(Response::getResult);
   }
 
+  @Timed(value="api.ping")
   @GetMapping("api/ping")
   public Mono<String> ping(@RequestParam("value") String value) {
     return Mono.just(value);
