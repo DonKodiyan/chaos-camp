@@ -1,5 +1,6 @@
 package ch.zuehlke.chaoscamp.hasher;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 public class HasherController {
 
     private HashMap<String, String> inMemoryValues = new HashMap<>();
+    private HashMap<String, String> wasteOfMemory = new HashMap<>();
 
     /**
      * Calculates the hash for a provided value. CPU-intensive
@@ -35,6 +37,9 @@ public class HasherController {
         if (!inMemoryValues.containsKey(value)) {
             inMemoryValues.put(value, hash(value));
         }
+
+        // just waste some memory
+        wasteOfMemory.put(value, RandomStringUtils.randomAlphabetic(10000));
 
         return Mono.just(new Response(inMemoryValues.get(value)));
     }

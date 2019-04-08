@@ -26,6 +26,7 @@ dependencies {
 	implementation 'io.micrometer:micrometer-registry-prometheus:latest.release'
 	
 	implementation 'org.mindrot:jbcrypt:0.4'
+	implementation 'org.apache.commons:commons-lang3:3.0'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'

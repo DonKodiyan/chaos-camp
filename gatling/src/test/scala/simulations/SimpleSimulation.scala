@@ -9,8 +9,9 @@ class SimpleSimulation extends Simulation {
     .baseUrl("http://localhost:8081")
 
   val scn = scenario("Simple scenario") // A scenario is a chain of requests and pauses
-    .exec(http("ping")
-      .get("/api/ping?value=test"))
+    .exec(http("api-info")
+      .get("/api/info"))
+    .pause(1)
     .exec(http("hash")
       .get("/api/hello?value=test"))
 
