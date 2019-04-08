@@ -15,3 +15,4 @@ deploy:
     manifests:
     - app/kubernetes/*
     - hasher/kubernetes/*
+    - monitoring/prometheus-grafana-manifest-all.yaml

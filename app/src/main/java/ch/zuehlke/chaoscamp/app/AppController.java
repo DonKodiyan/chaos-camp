@@ -1,5 +1,6 @@
 package ch.zuehlke.chaoscamp.app;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ public class AppController {
 
   }
 
+  @Timed(value="api.hello")
   @GetMapping("api/hello")
   public Mono<String> hash(@RequestParam("value") String value) {
     return webClient
@@ -29,9 +31,16 @@ public class AppController {
             .map(Response::getResult);
   }
 
-  @GetMapping("api/ping")
-  public Mono<String> ping(@RequestParam("value") String value) {
-    return Mono.just(value);
+  @Timed(value="api.info")
+  @GetMapping("api/info")
+  public Mono<String> info() {
+    return Mono.just(
+            "<br/> Node MY_NODE_NAME: " + System.getenv().get("MY_NODE_NAME") +
+            "<br/> Node MY_POD_NAME: " + System.getenv().get("MY_POD_NAME") +
+            "<br/> Node MY_POD_NAMESPACE: " + System.getenv().get("MY_POD_NAMESPACE") +
+            "<br/> Node MY_POD_IP: " + System.getenv().get("MY_POD_IP") +
+            "<br/> Node MY_POD_SERVICE_ACCOUNT: " + System.getenv().get("MY_POD_SERVICE_ACCOUNT")
+    ) ;
   }
 
   public static class Response {
