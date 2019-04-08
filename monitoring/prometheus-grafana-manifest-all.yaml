@@ -2425,29 +2425,9 @@ data:
               names:
               - default
         relabel_configs:
-        - action: keep
-          source_labels:
-          - __meta_kubernetes_service_label_alertmanager
-          regex: main
-        - action: keep
-          source_labels:
-          - __meta_kubernetes_endpoint_port_name
-          regex: web
-        - source_labels:
-          - __meta_kubernetes_namespace
-          target_label: namespace
-        - source_labels:
-          - __meta_kubernetes_pod_name
-          target_label: pod
-        - source_labels:
-          - __meta_kubernetes_service_name
-          target_label: service
-        - source_labels:
-          - __meta_kubernetes_service_name
-          target_label: job
-          replacement: ${1}
-        - target_label: endpoint
-          replacement: web
+          - source_labels:
+            - __meta_kubernetes_namespace
+            target_label: namespace
 kind: ConfigMap
 metadata:
   creationTimestamp: null
