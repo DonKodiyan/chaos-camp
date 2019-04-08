@@ -1,0 +1,16 @@
+[Unit]
+Description=ToxiProxy Server
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/tmp/
+ExecStart=/usr/bin/toxiproxy-server -port 8474 -host 0.0.0.0
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=0
+PrivateTmp=true
+PrivateDevices=true
+[Install]
+WantedBy=multi-user.target
