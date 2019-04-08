@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Hasher Toxiproxy Latency Client" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="ch.zuehlke.chaoscamp.toxiproxy.HasherToxiproxyLatencyClient" />
+  <configuration default="false" name="Toxiproxy start" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="toxiproxy.main" />
     <extension name="coverage">
       <pattern>
@@ -8,6 +7,8 @@
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.chaoscamp.toxiproxy.ToxiproxyApplication" />
+    <option name="ALTERNATIVE_JRE_PATH" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
