@@ -24,6 +24,8 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT'
 	implementation 'io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT'
 
+	implementation 'io.micrometer:micrometer-registry-prometheus:latest.release'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
 	testImplementation 'org.assertj:assertj-core:3.11.0'
