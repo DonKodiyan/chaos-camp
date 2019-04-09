@@ -14,6 +14,12 @@ class SimpleSimulation extends Simulation {
     .pause(1)
     .exec(http("hash")
       .get("/api/hello?value=test"))
+    .pause(1)
+    .exec(http("cpu-intensive")
+      .get("/api/cpu-intensive"))
+    .pause(1)
+    .exec(http("memory-intensive")
+      .get("/api/memory-intensive"))
 
   setUp(scn.inject(atOnceUsers(100)).protocols(httpProtocol))
 }
