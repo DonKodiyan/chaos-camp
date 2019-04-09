@@ -1,3 +1,9 @@
 .idea
 .gradle
 .idea/*
+app/bin/*
+hasher/bin/*
+toxiproxy/bin/*
+toxiproxy/.project
+toxiproxy/.classpath
+toxiproxy/.settings/org.eclipse.buildship.core.prefs
