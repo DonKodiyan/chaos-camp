@@ -16,8 +16,8 @@ public class HasherController {
 
     private  static final Logger LOGGER = LoggerFactory.getLogger(HasherController.class);
 
-    private HashMap<String, String> inMemoryValues = new HashMap<>();
-    private HashMap<String, String> wasteOfMemory = new HashMap<>();
+    private static final HashMap<String, String> inMemoryValues = new HashMap<>();
+    private static final HashMap<String, String> wasteOfMemory = new HashMap<>();
 
     /**
      * Calculates the hash for a provided value. CPU-intensive
@@ -45,7 +45,7 @@ public class HasherController {
         }
 
         // just waste some memory
-        wasteOfMemory.put(value, RandomStringUtils.randomAlphabetic(10000));
+        wasteOfMemory.put(value, RandomStringUtils.randomAlphabetic(100000));
 
         return Mono.just(new Response(inMemoryValues.get(value)));
     }
