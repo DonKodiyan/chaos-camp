@@ -17,6 +17,9 @@ spec:
         image: gcr.io/chaos-camp/hasher:latest
         ports:
         - containerPort: 8082
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: chaos-monkey
         resources:
           limits:
             memory: "256M"
