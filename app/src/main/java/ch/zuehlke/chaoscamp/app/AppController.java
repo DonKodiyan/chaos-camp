@@ -29,7 +29,7 @@ public class AppController {
     @Timed(value = "api.hello")
     @GetMapping("api/hello")
     public Mono<String> hash(@RequestParam("value") String value) {
-        LOGGER.info("called 'hash' with value={}", value);
+        LOGGER.debug("called 'hash' with value={}", value);
         return webClient
                 .get()
                 .uri(uriBuilder -> uriBuilder.path("/hash").queryParam("value", value).build())
@@ -42,7 +42,7 @@ public class AppController {
     @Timed(value = "api.info")
     @GetMapping("api/info")
     public Mono<String> info() {
-        LOGGER.info("called 'info'");
+        LOGGER.debug("called 'info'");
         return Mono.just(
                 "<br/> Node MY_NODE_NAME: " + System.getenv().get("MY_NODE_NAME") +
                         "<br/> Node MY_POD_NAME: " + System.getenv().get("MY_POD_NAME") +
@@ -55,7 +55,7 @@ public class AppController {
     @Timed(value = "api.cpu-intensive")
     @GetMapping("api/cpu-intensive")
     public Mono<String> getCpuIntensiveTask() {
-        LOGGER.info("called 'getCpuIntensiveTask'");
+        LOGGER.debug("called 'getCpuIntensiveTask'");
 
         String value = RandomStringUtils.randomAlphabetic(10);
 
@@ -71,7 +71,7 @@ public class AppController {
     @Timed(value = "api.memory-intensive")
     @GetMapping("api/memory-intensive")
     public Mono<String> getMemoryIntensiveTask() {
-        LOGGER.info("called 'getMemoryIntensiveTask'");
+        LOGGER.debug("called 'getMemoryIntensiveTask'");
         String value = RandomStringUtils.randomAlphabetic(10);
 
         return webClient

@@ -27,7 +27,7 @@ public class HasherController {
      */
     @GetMapping("api/hash")
     public Mono<Response> hashCpu(@RequestParam("value") String value) {
-        LOGGER.info("called 'hashCpu' with value={}", value);
+        LOGGER.debug("called 'hashCpu' with value={}", value);
         return Mono.just(new Response(hash(value)));
     }
 
@@ -39,7 +39,7 @@ public class HasherController {
      */
     @GetMapping("api/hash-from-memory")
     public Mono<Response> hashFromMemory(@RequestParam("value") String value) {
-        LOGGER.info("called 'hashFromMemory' with value={}", value);
+        LOGGER.debug("called 'hashFromMemory' with value={}", value);
         if (!inMemoryValues.containsKey(value)) {
             inMemoryValues.put(value, hash(value));
         }
