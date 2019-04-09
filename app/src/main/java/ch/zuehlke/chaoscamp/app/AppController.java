@@ -14,25 +14,22 @@ import reactor.core.publisher.Mono;
 public class AppController {
 
     private final WebClient webClient;
+    private final AppService appService;
 
-    public AppController(@Value("${external.hasher.api}") String api) {
+    public AppController(@Value("${external.hasher.api}") String api, AppService appService) {
         webClient = WebClient.builder()
                 .baseUrl(api)
                 .build();
+        this.appService = appService;
 
     }
 
     @Timed(value = "api.hello")
     @GetMapping("api/hello")
-    public Mono<String> hash(@RequestParam("value") String value) {
-        return webClient
-                .get()
-                .uri(uriBuilder -> uriBuilder.path("/hash").queryParam("value", value).build())
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .retrieve()
-                .bodyToMono(Response.class)
-                .map(Response::getResult);
+    public String hash(@RequestParam("value") String value) {
+        return appService.hash_base(value);
     }
+
 
     @Timed(value = "api.info")
     @GetMapping("api/info")

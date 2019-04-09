@@ -14,6 +14,10 @@ You can find more info on how to install, here: https://skaffold.dev/docs/gettin
 * [Chaos Monkey for Spring Boot](https://codecentric.github.io/chaos-monkey-spring-boot/)
 * Chaos Monkey for Kubernetes
 * Kubernetes
+How to get all instances of a service
+```
+kubectl get pods -o=name --all-namespaces | grep chaoscamp-app
+```
 * Toxy Proxy
 * Wiremock
 * Grafana (Prometheus)
