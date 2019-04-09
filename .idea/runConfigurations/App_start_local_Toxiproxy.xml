@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="App start local" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="App start local Toxiproxy" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="app.main" />
     <extension name="coverage">
       <pattern>
@@ -8,7 +8,7 @@
       </pattern>
     </extension>
     <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.chaoscamp.app.AppBackendApplication" />
-    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local -Dlogging.level.ch.zuehlke=DEBUG" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=toxiproxy -Dlogging.level.ch.zuehlke=DEBUG" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <method v="2">
       <option name="Make" enabled="true" />
