@@ -27,6 +27,12 @@ public class AppController {
         return appService.getHash(value);
     }
 
+    @GetMapping("api/world")
+    public String hashResilient(@RequestParam("value") String value) {
+        LOGGER.debug("called 'hashResilient' with value={}", value);
+        return appService.getHashResilient(value);
+    }
+
 
     @Timed(value = "api.info")
     @GetMapping("api/info")

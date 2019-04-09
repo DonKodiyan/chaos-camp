@@ -1,15 +1,24 @@
 package ch.zuehlke.chaoscamp.app;
 
+import ch.zuehlke.chaoscamp.app.resilience.CircuitBreakerRuntimeException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.vavr.control.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.function.Supplier;
 
 @Service
 public class AppService {
+
+    private  static final Logger LOGGER = LoggerFactory.getLogger(AppService.class);
+
     private final RestTemplate restTemplate;
     private final String baseUri;
 
@@ -24,9 +33,19 @@ public class AppService {
         return restTemplate.getForObject(uri, String.class);
     }
 
+    public String getHashResilient(String value) {
+        String uri = UriComponentsBuilder.newInstance().uri(URI.create(baseUri)).path("/hash").queryParam("value", value).build().toString();
+
+        CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults("hasher");
+
+        Supplier<String> backendFunction = CircuitBreaker.decorateSupplier(circuitBreaker, () -> restTemplate.getForObject(uri, String.class));
+
+        return Try.ofSupplier(backendFunction).getOrElseThrow(t -> new CircuitBreakerRuntimeException("Backend is currently not available", t));
+    }
+
     @SuppressWarnings("unused")
     public String getHashFallback(String value) {
-        System.out.println("Hystrix fallback for hash called");
+        LOGGER.debug("Hystrix fallback for hash called");
         return "Hystrix fallback for hash";
     }
 
@@ -38,7 +57,7 @@ public class AppService {
 
     @SuppressWarnings("unused")
     public String getHashMemoryIntensiveFallback(String value) {
-        System.out.println("Hystrix fallback for hash memory intensive called");
+        LOGGER.debug("Hystrix fallback for hash memory intensive called");
         return "Hystrix fallback for hash memory intensive";
     }
 

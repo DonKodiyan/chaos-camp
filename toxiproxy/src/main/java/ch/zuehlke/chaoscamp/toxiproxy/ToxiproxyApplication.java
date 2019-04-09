@@ -10,5 +10,4 @@ public class ToxiproxyApplication {
     SpringApplication.run(ToxiproxyApplication.class, args);
   }
 
-
 }
