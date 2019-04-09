@@ -8,7 +8,11 @@
       </pattern>
     </extension>
     <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.chaoscamp.hasher.HasherBackendApplication" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local,chaos-monkey" />
     <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="HOSTNAME" value="localhost" />
+    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
