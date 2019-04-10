@@ -1,0 +1,25 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: chaoscamp-toxiproxy-api
+spec:
+  selector:
+    app: chaoscamp-toxiproxy
+  ports:
+    - protocol: TCP
+      port: 8474
+      targetPort: 8474
+  type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: chaoscamp-toxiproxy-proxy
+spec:
+  selector:
+    app: chaoscamp-toxiproxy
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+  type: LoadBalancer
