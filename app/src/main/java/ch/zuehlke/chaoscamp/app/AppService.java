@@ -3,6 +3,8 @@ package ch.zuehlke.chaoscamp.app;
 import ch.zuehlke.chaoscamp.app.resilience.CircuitBreakerRuntimeException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.vavr.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 @Service
@@ -21,10 +26,19 @@ public class AppService {
 
     private final RestTemplate restTemplate;
     private final String baseUri;
+    private final CircuitBreaker circuitBreaker;
 
     public AppService(@Value("${external.hasher.api}") String api) {
         this.restTemplate = new RestTemplate();
         this.baseUri = api;
+        CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
+                .failureRateThreshold(50)
+                .waitDurationInOpenState(Duration.ofMillis(1000))
+                .ringBufferSizeInHalfOpenState(2)
+                .ringBufferSizeInClosedState(5)
+                .build();
+
+        this.circuitBreaker = CircuitBreakerRegistry.of(circuitBreakerConfig).circuitBreaker("hasher");
     }
 
     @HystrixCommand(fallbackMethod = "getHashFallback")
@@ -36,11 +50,15 @@ public class AppService {
     public String getHashResilient(String value) {
         String uri = UriComponentsBuilder.newInstance().uri(URI.create(baseUri)).path("/hash").queryParam("value", value).build().toString();
 
-        CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults("hasher");
+        Supplier<String> backendFunction = CircuitBreaker.decorateSupplier(circuitBreaker, () -> {
+            LOGGER.info("Trying to call");
+            return restTemplate.getForObject(uri, String.class);
+        });
 
-        Supplier<String> backendFunction = CircuitBreaker.decorateSupplier(circuitBreaker, () -> restTemplate.getForObject(uri, String.class));
+        LOGGER.info(circuitBreaker.getState().name());
+        return Try.ofSupplier(backendFunction).getOrElse("Backend is currently not available");
 
-        return Try.ofSupplier(backendFunction).getOrElseThrow(t -> new CircuitBreakerRuntimeException("Backend is currently not available", t));
+//        return Try.ofSupplier(backendFunction).getOrElseThrow(t -> new CircuitBreakerRuntimeException("Backend is currently not available", t));
     }
 
     @SuppressWarnings("unused")
