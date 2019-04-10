@@ -8,6 +8,8 @@ build:
   - image: gcr.io/chaos-camp/hasher
     context: hasher
     jibGradle: {}
+  - image: gcr.io/chaos-camp/toxiproxy
+    context: toxiproxy
   local:
     push: false
 deploy:
@@ -15,4 +17,5 @@ deploy:
     manifests:
     - app/kubernetes/*
     - hasher/kubernetes/*
+    - toxiproxy/kubernetes/*
     - monitoring/prometheus-grafana-manifest-all.yaml
