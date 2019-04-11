@@ -20,8 +20,12 @@ public class HasherController {
 
     private static final HashMap<String, String> inMemoryValues = new HashMap<>();
     private static final HashMap<String, String> wasteOfMemory = new HashMap<>();
-    private static final Semaphore concurrentAccessSemaphore = new Semaphore(5);
-    private static Integer counter = 0;
+    private static final Integer MAX_CONCURRENT_USERS = 3;
+    private static Semaphore concurrentAccessSemaphore;
+
+    public HasherController() {
+        concurrentAccessSemaphore = new Semaphore(MAX_CONCURRENT_USERS);
+    }
 
     /**
      * Calculates the hash for a provided value. CPU-intensive
@@ -40,10 +44,14 @@ public class HasherController {
     public Mono<Response> hashCpuLimited(@RequestParam("value") String value) throws InterruptedException {
         LOGGER.debug("called 'hashCpuLimited' with value={}", value);
         if (!concurrentAccessSemaphore.tryAcquire()) {
-            throw new RuntimeException("Too much looooooooad! Currently serving " + counter);
+            throw new RuntimeException("Too much looooooooad!");
         }
 
-        Thread.sleep(500);
+        Integer timeoutValue = (MAX_CONCURRENT_USERS - concurrentAccessSemaphore.availablePermits()) * 2000;
+
+        LOGGER.info("Sleeping for " + timeoutValue);
+
+        Thread.sleep(timeoutValue);
 
         Mono<Response> result = Mono.just(new Response(hash(value)));
 
@@ -55,7 +63,7 @@ public class HasherController {
 
     @Scheduled(fixedRate = 250)
     public void showUsageInformation() {
-        LOGGER.info(concurrentAccessSemaphore.availablePermits() + " available slots for hash-limited");
+        LOGGER.info(concurrentAccessSemaphore.availablePermits() + " available slots for /api/hash-limited");
     }
 
 

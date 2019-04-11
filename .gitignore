@@ -7,3 +7,4 @@ toxiproxy/bin/*
 toxiproxy/.project
 toxiproxy/.classpath
 toxiproxy/.settings/org.eclipse.buildship.core.prefs
+/toxiproxy/out/
