@@ -47,7 +47,7 @@ public class HasherController {
             throw new RuntimeException("Too much looooooooad!");
         }
 
-        Integer timeoutValue = (MAX_CONCURRENT_USERS - concurrentAccessSemaphore.availablePermits()) * 2000;
+        Integer timeoutValue = (MAX_CONCURRENT_USERS - concurrentAccessSemaphore.availablePermits()) * 100;
 
         LOGGER.info("Sleeping for " + timeoutValue);
 

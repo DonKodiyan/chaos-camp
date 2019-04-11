@@ -16,7 +16,7 @@ class CircuitBreakerSimulation extends Simulation {
 
   setUp(
     circuitBreaker.inject(
-      rampUsers(100) during (30 seconds)
+      rampUsersPerSec(1) to(20) during (120 seconds)
     )
   ).protocols(httpProtocol)
 }

@@ -18,9 +18,12 @@ public class ResilientService {
 
     private final RestTemplate restTemplateTightTimeout;
     private final RestTemplate restTemplate;
-    private final String baseUri;
+    private final String apiUrl;
+    private final String apiToxicUrl;
 
-    public ResilientService(@Value("${external.hasher.api}") String api, RestTemplateBuilder restTemplateBuilder) {
+    public ResilientService(@Value("${external.hasher.api}") String api,
+                            @Value("${external.hasher.api.toxic}") String toxicApi,
+                            RestTemplateBuilder restTemplateBuilder) {
         this.restTemplateTightTimeout = restTemplateBuilder
                 .setConnectTimeout(Duration.ofMillis(1000))
                 .setReadTimeout(Duration.ofMillis(1000))
@@ -28,31 +31,33 @@ public class ResilientService {
 
         this.restTemplate = new RestTemplate();
 
-        this.baseUri = api;
+        this.apiUrl = api;
+        this.apiToxicUrl = toxicApi;
     }
 
     public String plain() {
-        return this.getHash(restTemplateTightTimeout, false);
+        return this.getHash(restTemplateTightTimeout, false, true);
     }
 
     @CircuitBreaker(name = "backendA")
     public String circuitBreaker() {
-        return this.getHash(restTemplate, true);
+        return this.getHash(restTemplateTightTimeout, true, false);
     }
 
     @Retry(name = "backendA")
     public String retry() {
-        return this.getHash(restTemplateTightTimeout, false);
+        return this.getHash(restTemplateTightTimeout, false, true);
     }
 
-    private String getHash(RestTemplate restTemplate, boolean limit) {
+    private String getHash(RestTemplate restTemplate, boolean limit, boolean toxic) {
         String value = RandomStringUtils.randomAlphabetic(10);
         String endpoint = limit ? "/hash-limited" : "/hash";
+        String apiUrl = toxic ? this.apiToxicUrl : this.apiUrl;
+
         String url = UriComponentsBuilder.newInstance().uri(
-                URI.create(baseUri))
+                URI.create(apiUrl))
                 .path(endpoint)
                 .queryParam("value", value)
-                .queryParam("limit", limit)
                 .build()
                 .toString();
         return restTemplate.getForObject(url, String.class);
