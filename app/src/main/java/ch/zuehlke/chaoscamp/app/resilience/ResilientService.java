@@ -1,6 +1,8 @@
 package ch.zuehlke.chaoscamp.app.resilience;
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,7 @@ public class ResilientService {
     private final String apiUrl;
     private final String apiToxicUrl;
 
+
     public ResilientService(@Value("${external.hasher.api}") String api,
                             @Value("${external.hasher.api.toxic}") String toxicApi,
                             RestTemplateBuilder restTemplateBuilder) {
@@ -33,6 +36,14 @@ public class ResilientService {
 
         this.apiUrl = api;
         this.apiToxicUrl = toxicApi;
+
+        /*BulkheadConfig config = BulkheadConfig.custom()
+                .maxConcurrentCalls(2)
+                .maxWaitTime(100)
+                .build();
+
+        bulkhead = Bulkhead.of("backendA", config); */
+
     }
 
     public String plain() {
@@ -47,6 +58,17 @@ public class ResilientService {
     @Retry(name = "backendA")
     public String retry() {
         return this.getHash(restTemplateTightTimeout, false, true);
+    }
+
+
+    @Bulkhead(name = "backendA")
+    public String bulkhead() {
+        return this.getHash(restTemplate, false, true);
+    }
+
+    @RateLimiter(name = "backendA")
+    public String ratelimiter() {
+        return this.getHash(restTemplate, false, true);
     }
 
     private String getHash(RestTemplate restTemplate, boolean limit, boolean toxic) {

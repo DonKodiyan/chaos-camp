@@ -28,4 +28,14 @@ public class ResilientController {
     public String retry() {
         return this.resilientService.retry();
     }
+
+    @GetMapping("api/resilience/bulkhead")
+    public String bulkhead() {
+        return this.resilientService.bulkhead();
+    }
+
+    @GetMapping("api/resilience/ratelimiter")
+    public String ratelimiter() {
+        return this.resilientService.ratelimiter();
+    }
 }
