@@ -15,16 +15,16 @@ import java.io.IOException;
 @Component
 public class ToxiproxyInitializer {
 
-    private  static final Logger LOGGER = LoggerFactory.getLogger(ToxiproxyInitializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ToxiproxyInitializer.class);
 
-    private  static final String PROXY_HASHER = "hasher";
+    private static final String PROXY_HASHER = "hasher";
 
-    private final ToxiproxyClient client ;
+    private final ToxiproxyClient client;
 
     @Value("${toxiproxy.hasher.listen}")
     private String hasherListen;
 
-    @Value("${toxiproxy.hasher.listen}")
+    @Value("${toxiproxy.hasher.upstream}")
     private String hasherUpstream;
 
     @Value("${toxiproxy.hasher.latency.millis}")
@@ -35,7 +35,7 @@ public class ToxiproxyInitializer {
 
     public ToxiproxyInitializer(
             @Value("${toxiproxy.client.host}") String host,
-            @Value("${toxiproxy.client.port}") int port    ) {
+            @Value("${toxiproxy.client.port}") int port) {
         client = new ToxiproxyClient(host, port);
     }
 
@@ -59,7 +59,7 @@ public class ToxiproxyInitializer {
 
     private Proxy createProxy(String proxyName, String listen, String upstream) throws IOException {
         Proxy proxy = client.createProxy(proxyName, listen, upstream);
-       LOGGER.info("Created proxy '{}', listen={}, upstream={}", proxy.getName(), proxy.getListen(), proxy.getUpstream());
+        LOGGER.info("Created proxy '{}', listen={}, upstream={}", proxy.getName(), proxy.getListen(), proxy.getUpstream());
         return proxy;
     }
 
@@ -73,7 +73,7 @@ public class ToxiproxyInitializer {
             Proxy proxy = client.getProxyOrNull(proxyName);
             if (proxy != null) {
                 proxy.delete();
-                LOGGER.info("Deleted proxy '{}'" , proxyName);
+                LOGGER.info("Deleted proxy '{}'", proxyName);
             }
         }
     }
