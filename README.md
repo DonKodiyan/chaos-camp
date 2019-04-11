@@ -37,3 +37,14 @@ kubectl get pods -o=name --all-namespaces | grep chaoscamp-app
 * [Stability Patterns & Antipatterns • Michael T. Nygard](https://m.youtube.com/watch?v=VZePNGQojfA)
 * [Release It!](https://doc.lagout.org/programmation/Pragmatic%20Programmers/Release%20It%21%20Design%20and%20Deploy%20Production-Ready%20Software.pdf)
 * [SRE Book](https://landing.google.com/sre/books/)
+
+## How to connect to hasher pod with jmx
+Find name of pod with
+```
+kubectl get pods
+```
+then forward local jmx port to pod with
+```
+kubectl port-forward <podname> 1099:1099
+```
+then connect to localhost:1099 with your favourite tool (jconsole, jmc, ...)
