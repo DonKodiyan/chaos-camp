@@ -4,20 +4,24 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
+import java.util.concurrent.Semaphore;
 
 @RestController
 public class HasherController {
 
-    private  static final Logger LOGGER = LoggerFactory.getLogger(HasherController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HasherController.class);
 
     private static final HashMap<String, String> inMemoryValues = new HashMap<>();
     private static final HashMap<String, String> wasteOfMemory = new HashMap<>();
+    private static final Semaphore concurrentAccessSemaphore = new Semaphore(5);
+    private static Integer counter = 0;
 
     /**
      * Calculates the hash for a provided value. CPU-intensive
@@ -28,8 +32,32 @@ public class HasherController {
     @GetMapping("api/hash")
     public Mono<Response> hashCpu(@RequestParam("value") String value) {
         LOGGER.debug("called 'hashCpu' with value={}", value);
+
         return Mono.just(new Response(hash(value)));
     }
+
+    @GetMapping("api/hash-limited")
+    public Mono<Response> hashCpuLimited(@RequestParam("value") String value) throws InterruptedException {
+        LOGGER.debug("called 'hashCpuLimited' with value={}", value);
+        if (!concurrentAccessSemaphore.tryAcquire()) {
+            throw new RuntimeException("Too much looooooooad! Currently serving " + counter);
+        }
+
+        Thread.sleep(500);
+
+        Mono<Response> result = Mono.just(new Response(hash(value)));
+
+
+        concurrentAccessSemaphore.release();
+
+        return result;
+    }
+
+    @Scheduled(fixedRate = 250)
+    public void showUsageInformation() {
+        LOGGER.info(concurrentAccessSemaphore.availablePermits() + " available slots for hash-limited");
+    }
+
 
     /**
      * Calculates or gets the hash from a in-memory cache. Memory-intensive
