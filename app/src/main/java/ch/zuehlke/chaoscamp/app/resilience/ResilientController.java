@@ -38,4 +38,19 @@ public class ResilientController {
     public String ratelimiter() {
         return this.resilientService.ratelimiter();
     }
+
+    @GetMapping("api/resilience/hash-plain")
+    public String hashPlain() {
+        return this.resilientService.hashPlain(false, "/hash-sleeping");
+    }
+
+    @GetMapping("api/resilience/hash-circuit-breaker")
+    public String hashCircuitBreaker() {
+        return this.resilientService.hashCircuitBreaker();
+    }
+
+    @GetMapping("api/resilience/hash-toxic-plain")
+    public String hashToxicPlain() {
+        return this.resilientService.hashPlain(true, "/hash");
+    }
 }

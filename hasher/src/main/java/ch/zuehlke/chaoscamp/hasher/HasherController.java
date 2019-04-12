@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 public class HasherController {
@@ -22,9 +23,35 @@ public class HasherController {
     private static final HashMap<String, String> wasteOfMemory = new HashMap<>();
     private static final Integer MAX_CONCURRENT_USERS = 3;
     private static Semaphore concurrentAccessSemaphore;
+    private static final AtomicInteger count = new AtomicInteger(0);
 
     public HasherController() {
         concurrentAccessSemaphore = new Semaphore(MAX_CONCURRENT_USERS);
+    }
+
+
+    @GetMapping("api/hash-fading")
+    public Mono<Response> hashFading(@RequestParam("value") String value) {
+        int connectionCount = count.incrementAndGet();
+        Mono<Response> hash = Mono.just(new Response(hash(value, 10 + connectionCount)));
+        count.decrementAndGet();
+
+        return hash;
+    }
+
+    @GetMapping("api/hash-sleeping")
+    public Mono<Response> hashSleeping(@RequestParam("value") String value) throws InterruptedException {
+        int connectionCount = count.incrementAndGet();
+        int timeoutValue = 1000 + connectionCount * 200;
+        LOGGER.info("Sleeping for " + timeoutValue);
+        try {
+            Thread.sleep(timeoutValue);
+        } finally {
+            count.decrementAndGet();
+        }
+
+
+        return Mono.just(new Response("dummy-hash"));
     }
 
     /**
@@ -63,7 +90,7 @@ public class HasherController {
 
     @Scheduled(fixedRate = 250)
     public void showUsageInformation() {
-        LOGGER.info(concurrentAccessSemaphore.availablePermits() + " available slots for /api/hash-limited");
+        LOGGER.debug(concurrentAccessSemaphore.availablePermits() + " available slots for /api/hash-limited");
     }
 
 
@@ -88,7 +115,12 @@ public class HasherController {
 
 
     private String hash(String value) {
-        return BCrypt.hashpw(value, BCrypt.gensalt(10));
+        return hash(value, 10);
+    }
+
+    private String hash(String value, int rounds) {
+        LOGGER.info("Hashing with {} rounds", rounds);
+        return BCrypt.hashpw(value, BCrypt.gensalt(rounds));
     }
 
     public static class Response {

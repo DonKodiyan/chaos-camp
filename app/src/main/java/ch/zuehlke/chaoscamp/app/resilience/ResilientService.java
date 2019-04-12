@@ -7,6 +7,7 @@ import io.github.resilience4j.retry.annotation.Retry;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -85,4 +86,28 @@ public class ResilientService {
         return restTemplate.getForObject(url, String.class);
     }
 
+    public String hashPlain(boolean toxic, String endpoint) {
+        return getHashWithTimeout(toxic, endpoint);
+    }
+
+    @CircuitBreaker(name = "hashCircuitBreaker")
+    public String hashCircuitBreaker() {
+        return getHashWithTimeout(false, "/hash-sleeping");
+    }
+
+    private String getHashWithTimeout(boolean toxic, String endpoint) {
+        String value = RandomStringUtils.randomAlphabetic(10);
+        String apiUrl = toxic ? this.apiToxicUrl : this.apiUrl;
+        String url = UriComponentsBuilder.newInstance().uri(
+                URI.create(apiUrl))
+                .path(endpoint)
+                .queryParam("value", value)
+                .build()
+                .toString();
+
+        SimpleClientHttpRequestFactory httpRequestFactory = new SimpleClientHttpRequestFactory();
+        httpRequestFactory.setReadTimeout(2000);
+
+        return new RestTemplate(httpRequestFactory).getForObject(url, String.class);
+    }
 }
