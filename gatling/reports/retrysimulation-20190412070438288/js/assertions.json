@@ -1,0 +1,10 @@
+{
+  "simulation": "simulations.RetrySimulation",
+  "simulationId": "retrysimulation",
+  "start": 1555052678288,
+  "description": "",
+  "scenarios": ["Retry scenario"],
+  "assertions": [
+
+  ]
+}

@@ -37,18 +37,10 @@ public class ResilientService {
 
         this.apiUrl = api;
         this.apiToxicUrl = toxicApi;
-
-        /*BulkheadConfig config = BulkheadConfig.custom()
-                .maxConcurrentCalls(2)
-                .maxWaitTime(100)
-                .build();
-
-        bulkhead = Bulkhead.of("backendA", config); */
-
     }
 
     public String plain() {
-        return this.getHash(restTemplateTightTimeout, false, true);
+        return this.getHash(restTemplateTightTimeout, true, true);
     }
 
     @CircuitBreaker(name = "backendA")
@@ -69,6 +61,14 @@ public class ResilientService {
 
     @RateLimiter(name = "backendA")
     public String ratelimiter() {
+        return this.getHash(restTemplate, false, true);
+    }
+
+    @CircuitBreaker(name = "backendA")
+    @Retry(name = "backendA")
+    @Bulkhead(name = "backendA")
+    @RateLimiter(name = "backendA")
+    public String allTogether() {
         return this.getHash(restTemplate, false, true);
     }
 

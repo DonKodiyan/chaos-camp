@@ -1,0 +1,10 @@
+{
+  "simulation": "simulations.CircuitBreakerSimulation",
+  "simulationId": "circuitbreakersimulation",
+  "start": 1554985040255,
+  "description": "",
+  "scenarios": ["Circuit breaker scenario"],
+  "assertions": [
+
+  ]
+}

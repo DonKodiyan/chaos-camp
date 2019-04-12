@@ -11,12 +11,15 @@ class BulkheadSimulation extends Simulation {
     .baseUrl("http://localhost:8081")
 
   val circuitBreaker = scenario("Bulkhead scenario")
+    .exec(http("api-info")
+      .get("/api/info"))
+    .pause(3)
     .exec(http("bulkhead")
       .get("/api/resilience/bulkhead"))
 
   setUp(
     circuitBreaker.inject(
-      rampUsersPerSec(1) to(20) during (120 seconds)
+      rampUsersPerSec(1) to(20) during (60 seconds)
     )
   ).protocols(httpProtocol)
 }

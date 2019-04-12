@@ -1,0 +1,10 @@
+{
+  "simulation": "simulations.RatelimiterSimulation",
+  "simulationId": "ratelimitersimulation",
+  "start": 1554988933886,
+  "description": "",
+  "scenarios": ["Ratelimiter scenario"],
+  "assertions": [
+
+  ]
+}

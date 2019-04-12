@@ -11,12 +11,14 @@ class PlainSimulation extends Simulation {
     .baseUrl("http://localhost:8081")
 
   val plain = scenario("Plain Scenario")
+    .exec(http("api-info")
+      .get("/api/info"))
     .exec(http("plain")
       .get("/api/resilience/plain"))
 
   setUp(
     plain.inject(
-      rampUsers(100) during (30 seconds)
+      rampUsersPerSec(1) to(30) during (60 seconds)
     )
   ).protocols(httpProtocol)
 }

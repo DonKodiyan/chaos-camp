@@ -39,6 +39,11 @@ public class ResilientController {
         return this.resilientService.ratelimiter();
     }
 
+    @GetMapping("api/resilience/all-together")
+    public String allTogether() {
+        return this.resilientService.allTogether();
+    }
+
     @GetMapping("api/resilience/hash-plain")
     public String hashPlain() {
         return this.resilientService.hashPlain(false, "/hash-sleeping");

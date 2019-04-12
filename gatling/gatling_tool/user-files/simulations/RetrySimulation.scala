@@ -16,7 +16,7 @@ class RetrySimulation extends Simulation {
 
   setUp(
     retry.inject(
-      rampUsers(100) during (30 seconds)
+      rampUsersPerSec(1) to(15) during (60 seconds)
     )
   ).protocols(httpProtocol)
 }
